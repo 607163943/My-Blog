@@ -1,12 +1,13 @@
-package com.site.blog.my.core.dao;
+package com.site.blog.my.core.mapper;
 
-import com.site.blog.my.core.pojo.entity.BlogCategory;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.site.blog.my.core.pojo.po.BlogCategory;
 import com.site.blog.my.core.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface BlogCategoryMapper {
+public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
     int deleteByPrimaryKey(Integer categoryId);
 
     int insert(BlogCategory record);

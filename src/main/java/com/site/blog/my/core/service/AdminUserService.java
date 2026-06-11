@@ -1,8 +1,9 @@
 package com.site.blog.my.core.service;
 
-import com.site.blog.my.core.pojo.entity.AdminUser;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.site.blog.my.core.pojo.po.AdminUser;
 
-public interface AdminUserService {
+public interface AdminUserService extends IService<AdminUser> {
 
     AdminUser login(String userName, String password);
 

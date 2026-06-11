@@ -1,11 +1,12 @@
-package com.site.blog.my.core.dao;
+package com.site.blog.my.core.mapper;
 
-import com.site.blog.my.core.pojo.entity.BlogLink;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.site.blog.my.core.pojo.po.BlogLink;
 import com.site.blog.my.core.util.PageQueryUtil;
 
 import java.util.List;
 
-public interface BlogLinkMapper {
+public interface BlogLinkMapper extends BaseMapper<BlogLink> {
     int deleteByPrimaryKey(Integer linkId);
 
     int insert(BlogLink record);

@@ -20,6 +20,12 @@ spring:
       max-lifetime: 30000
       connection-timeout: 30000
       connection-test-query: SELECT 1
-# mybatis
-mybatis:
-  mapper-locations: classpath:mapper/*Mapper.xml
+# mybatis-plus
+mybatis-plus:
+  type-aliases-package: com.site.blog.my.core.pojo.po
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: is_deleted
+      logic-not-delete-value: 0
+      logic-delete-value: 1

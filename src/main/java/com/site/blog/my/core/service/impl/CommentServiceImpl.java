@@ -1,7 +1,8 @@
 package com.site.blog.my.core.service.impl;
 
-import com.site.blog.my.core.dao.BlogCommentMapper;
-import com.site.blog.my.core.pojo.entity.BlogComment;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.site.blog.my.core.mapper.BlogCommentMapper;
+import com.site.blog.my.core.pojo.po.BlogComment;
 import com.site.blog.my.core.service.CommentService;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.PageResult;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class CommentServiceImpl implements CommentService {
+public class CommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogComment> implements CommentService {
     @Autowired
     private BlogCommentMapper blogCommentMapper;
 

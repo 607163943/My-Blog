@@ -1,4 +1,4 @@
-package com.site.blog.my.core.pojo.entity;
+package com.site.blog.my.core.pojo.po;
 
 import lombok.Data;
 

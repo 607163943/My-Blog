@@ -1,11 +1,12 @@
-package com.site.blog.my.core.dao;
+package com.site.blog.my.core.mapper;
 
-import com.site.blog.my.core.pojo.entity.BlogTagRelation;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.site.blog.my.core.pojo.po.BlogTagRelation;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface BlogTagRelationMapper {
+public interface BlogTagRelationMapper extends BaseMapper<BlogTagRelation> {
     int deleteByPrimaryKey(Long relationId);
 
     int insert(BlogTagRelation record);

@@ -1,4 +1,4 @@
-package com.site.blog.my.core.pojo.entity;
+package com.site.blog.my.core.pojo.po;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

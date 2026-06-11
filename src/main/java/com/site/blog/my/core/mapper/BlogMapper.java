@@ -1,12 +1,13 @@
-package com.site.blog.my.core.dao;
+package com.site.blog.my.core.mapper;
 
-import com.site.blog.my.core.pojo.entity.Blog;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.site.blog.my.core.pojo.po.Blog;
 import com.site.blog.my.core.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface BlogMapper {
+public interface BlogMapper extends BaseMapper<Blog> {
     int deleteByPrimaryKey(Long blogId);
 
     int insert(Blog record);

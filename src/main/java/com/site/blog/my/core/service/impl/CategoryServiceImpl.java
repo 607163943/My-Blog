@@ -1,8 +1,10 @@
 package com.site.blog.my.core.service.impl;
 
-import com.site.blog.my.core.dao.BlogCategoryMapper;
-import com.site.blog.my.core.dao.BlogMapper;
-import com.site.blog.my.core.pojo.entity.BlogCategory;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.site.blog.my.core.mapper.BlogCategoryMapper;
+import com.site.blog.my.core.mapper.BlogMapper;
+import com.site.blog.my.core.pojo.po.BlogCategory;
 import com.site.blog.my.core.service.CategoryService;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.PageResult;
@@ -13,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, BlogCategory> implements CategoryService {
 
     @Autowired
     private BlogCategoryMapper blogCategoryMapper;

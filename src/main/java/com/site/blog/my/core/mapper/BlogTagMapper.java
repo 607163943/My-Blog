@@ -1,11 +1,12 @@
-package com.site.blog.my.core.dao;
+package com.site.blog.my.core.mapper;
 
-import com.site.blog.my.core.pojo.entity.BlogTag;
-import com.site.blog.my.core.pojo.entity.BlogTagCount;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.site.blog.my.core.pojo.po.BlogTag;
+import com.site.blog.my.core.pojo.po.BlogTagCount;
 import com.site.blog.my.core.util.PageQueryUtil;
 import java.util.List;
 
-public interface BlogTagMapper {
+public interface BlogTagMapper extends BaseMapper<BlogTag> {
     int deleteByPrimaryKey(Integer tagId);
 
     int insert(BlogTag record);

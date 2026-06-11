@@ -1,7 +1,8 @@
 package com.site.blog.my.core.service.impl;
 
-import com.site.blog.my.core.dao.BlogLinkMapper;
-import com.site.blog.my.core.pojo.entity.BlogLink;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.site.blog.my.core.mapper.BlogLinkMapper;
+import com.site.blog.my.core.pojo.po.BlogLink;
 import com.site.blog.my.core.service.LinkService;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.PageResult;
@@ -14,7 +15,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class LinkServiceImpl implements LinkService {
+public class LinkServiceImpl extends ServiceImpl<BlogLinkMapper, BlogLink> implements LinkService {
 
     @Autowired
     private BlogLinkMapper blogLinkMapper;

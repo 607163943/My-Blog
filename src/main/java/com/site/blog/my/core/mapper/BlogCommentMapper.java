@@ -1,10 +1,11 @@
-package com.site.blog.my.core.dao;
+package com.site.blog.my.core.mapper;
 
-import com.site.blog.my.core.pojo.entity.BlogComment;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.site.blog.my.core.pojo.po.BlogComment;
 import java.util.List;
 import java.util.Map;
 
-public interface BlogCommentMapper {
+public interface BlogCommentMapper extends BaseMapper<BlogComment> {
     int deleteByPrimaryKey(Long commentId);
 
     int insert(BlogComment record);

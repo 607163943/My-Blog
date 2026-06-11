@@ -1,7 +1,8 @@
 package com.site.blog.my.core.service.impl;
 
-import com.site.blog.my.core.dao.AdminUserMapper;
-import com.site.blog.my.core.pojo.entity.AdminUser;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.site.blog.my.core.mapper.AdminUserMapper;
+import com.site.blog.my.core.pojo.po.AdminUser;
 import com.site.blog.my.core.service.AdminUserService;
 import com.site.blog.my.core.util.MD5Util;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 @Service
-public class AdminUserServiceImpl implements AdminUserService {
+public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser> implements AdminUserService {
 
     @Resource
     private AdminUserMapper adminUserMapper;

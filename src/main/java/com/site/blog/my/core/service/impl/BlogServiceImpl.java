@@ -1,14 +1,15 @@
 package com.site.blog.my.core.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.site.blog.my.core.pojo.vo.BlogDetailVO;
 import com.site.blog.my.core.pojo.vo.BlogListVO;
 import com.site.blog.my.core.pojo.vo.SimpleBlogListVO;
-import com.site.blog.my.core.dao.*;
-import com.site.blog.my.core.pojo.entity.Blog;
-import com.site.blog.my.core.pojo.entity.BlogCategory;
-import com.site.blog.my.core.pojo.entity.BlogTag;
-import com.site.blog.my.core.pojo.entity.BlogTagRelation;
+import com.site.blog.my.core.mapper.*;
+import com.site.blog.my.core.pojo.po.Blog;
+import com.site.blog.my.core.pojo.po.BlogCategory;
+import com.site.blog.my.core.pojo.po.BlogTag;
+import com.site.blog.my.core.pojo.po.BlogTagRelation;
 import com.site.blog.my.core.service.BlogService;
 import com.site.blog.my.core.util.MarkDownUtil;
 import com.site.blog.my.core.util.PageQueryUtil;
@@ -25,7 +26,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class BlogServiceImpl implements BlogService {
+public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements BlogService {
 
     @Autowired
     private BlogMapper blogMapper;

@@ -1,9 +1,10 @@
 package com.site.blog.my.core.service.impl;
 
-import com.site.blog.my.core.dao.BlogTagMapper;
-import com.site.blog.my.core.dao.BlogTagRelationMapper;
-import com.site.blog.my.core.pojo.entity.BlogTag;
-import com.site.blog.my.core.pojo.entity.BlogTagCount;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.site.blog.my.core.mapper.BlogTagMapper;
+import com.site.blog.my.core.mapper.BlogTagRelationMapper;
+import com.site.blog.my.core.pojo.po.BlogTag;
+import com.site.blog.my.core.pojo.po.BlogTagCount;
 import com.site.blog.my.core.service.TagService;
 import com.site.blog.my.core.util.PageQueryUtil;
 import com.site.blog.my.core.util.PageResult;
@@ -14,7 +15,7 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 @Service
-public class TagServiceImpl implements TagService {
+public class TagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> implements TagService {
 
     @Autowired
     private BlogTagMapper blogTagMapper;

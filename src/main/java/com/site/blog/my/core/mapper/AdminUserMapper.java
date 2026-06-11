@@ -1,9 +1,10 @@
-package com.site.blog.my.core.dao;
+package com.site.blog.my.core.mapper;
 
-import com.site.blog.my.core.pojo.entity.AdminUser;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.site.blog.my.core.pojo.po.AdminUser;
 import org.apache.ibatis.annotations.Param;
 
-public interface AdminUserMapper {
+public interface AdminUserMapper extends BaseMapper<AdminUser> {
     int insert(AdminUser record);
 
     int insertSelective(AdminUser record);

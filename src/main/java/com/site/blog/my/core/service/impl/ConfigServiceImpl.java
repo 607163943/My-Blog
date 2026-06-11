@@ -1,7 +1,8 @@
 package com.site.blog.my.core.service.impl;
 
-import com.site.blog.my.core.dao.BlogConfigMapper;
-import com.site.blog.my.core.pojo.entity.BlogConfig;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.site.blog.my.core.mapper.BlogConfigMapper;
+import com.site.blog.my.core.pojo.po.BlogConfig;
 import com.site.blog.my.core.service.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class ConfigServiceImpl implements ConfigService {
+public class ConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogConfig> implements ConfigService {
     @Autowired
     private BlogConfigMapper configMapper;
 
