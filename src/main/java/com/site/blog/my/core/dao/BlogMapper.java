@@ -1,6 +1,6 @@
 package com.site.blog.my.core.dao;
 
-import com.site.blog.my.core.entity.Blog;
+import com.site.blog.my.core.pojo.entity.Blog;
 import com.site.blog.my.core.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
 

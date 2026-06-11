@@ -1,9 +1,9 @@
 package com.site.blog.my.core.controller.blog;
 
 import cn.hutool.captcha.ShearCaptcha;
-import com.site.blog.my.core.controller.vo.BlogDetailVO;
-import com.site.blog.my.core.entity.BlogComment;
-import com.site.blog.my.core.entity.BlogLink;
+import com.site.blog.my.core.pojo.vo.BlogDetailVO;
+import com.site.blog.my.core.pojo.entity.BlogComment;
+import com.site.blog.my.core.pojo.entity.BlogLink;
 import com.site.blog.my.core.service.*;
 import com.site.blog.my.core.util.*;
 import org.springframework.stereotype.Controller;

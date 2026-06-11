@@ -1,6 +1,6 @@
 package com.site.blog.my.core.dao;
 
-import com.site.blog.my.core.entity.BlogTagRelation;
+import com.site.blog.my.core.pojo.entity.BlogTagRelation;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

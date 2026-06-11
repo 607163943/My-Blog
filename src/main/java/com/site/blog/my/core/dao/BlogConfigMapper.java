@@ -1,6 +1,6 @@
 package com.site.blog.my.core.dao;
 
-import com.site.blog.my.core.entity.BlogConfig;
+import com.site.blog.my.core.pojo.entity.BlogConfig;
 
 import java.util.List;
 

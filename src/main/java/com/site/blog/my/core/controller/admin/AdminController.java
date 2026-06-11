@@ -1,7 +1,7 @@
 package com.site.blog.my.core.controller.admin;
 
 import cn.hutool.captcha.ShearCaptcha;
-import com.site.blog.my.core.entity.AdminUser;
+import com.site.blog.my.core.pojo.entity.AdminUser;
 import com.site.blog.my.core.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
