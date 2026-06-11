@@ -1,5 +1,6 @@
 package com.site.blog.my.core.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.site.blog.my.core.pojo.vo.BlogDetailVO;
 import com.site.blog.my.core.pojo.vo.BlogListVO;
 import com.site.blog.my.core.pojo.vo.SimpleBlogListVO;
@@ -125,12 +126,7 @@ public class BlogServiceImpl implements BlogService {
         if (blogForUpdate == null) {
             return "数据不存在";
         }
-        blogForUpdate.setBlogTitle(blog.getBlogTitle());
-        blogForUpdate.setBlogSubUrl(blog.getBlogSubUrl());
-        blogForUpdate.setBlogContent(blog.getBlogContent());
-        blogForUpdate.setBlogCoverImage(blog.getBlogCoverImage());
-        blogForUpdate.setBlogStatus(blog.getBlogStatus());
-        blogForUpdate.setEnableComment(blog.getEnableComment());
+        BeanUtil.copyProperties(blog, blogForUpdate);
         BlogCategory blogCategory = categoryMapper.selectByPrimaryKey(blog.getBlogCategoryId());
         if (blogCategory == null) {
             blogForUpdate.setBlogCategoryId(0);
@@ -190,7 +186,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public PageResult getBlogsForIndexPage(int page) {
-        Map params = new HashMap();
+        Map<String,Object> params = new HashMap();
         params.put("page", page);
         //每页8条
         params.put("limit", 8);
@@ -233,7 +229,7 @@ public class BlogServiceImpl implements BlogService {
         if (PatternUtil.validKeyword(tagName)) {
             BlogTag tag = tagMapper.selectByTagName(tagName);
             if (tag != null && page > 0) {
-                Map param = new HashMap();
+                Map<String,Object> param = new HashMap<>();
                 param.put("page", page);
                 param.put("limit", 9);
                 param.put("tagId", tag.getTagId());
@@ -257,7 +253,7 @@ public class BlogServiceImpl implements BlogService {
                 blogCategory.setCategoryId(0);
             }
             if (blogCategory != null && page > 0) {
-                Map param = new HashMap();
+                Map<String,Object> param = new HashMap<>();
                 param.put("page", page);
                 param.put("limit", 9);
                 param.put("blogCategoryId", blogCategory.getCategoryId());
@@ -276,7 +272,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public PageResult getBlogsPageBySearch(String keyword, int page) {
         if (page > 0 && PatternUtil.validKeyword(keyword)) {
-            Map param = new HashMap();
+            Map<String,Object> param = new HashMap<>();
             param.put("page", page);
             param.put("limit", 9);
             param.put("keyword", keyword);
@@ -331,7 +327,7 @@ public class BlogServiceImpl implements BlogService {
                 blogDetailVO.setBlogTags(tags);
             }
             //设置评论数
-            Map params = new HashMap();
+            Map<String,Object> params = new HashMap<>();
             params.put("blogId", blog.getBlogId());
             params.put("commentStatus", 1);//过滤审核通过的数据
             blogDetailVO.setCommentCount(blogCommentMapper.getTotalBlogComments(params));

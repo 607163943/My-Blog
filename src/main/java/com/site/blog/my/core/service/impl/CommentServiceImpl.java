@@ -64,7 +64,7 @@ public class CommentServiceImpl implements CommentService {
         if (page < 1) {
             return null;
         }
-        Map params = new HashMap();
+        Map<String,Object> params = new HashMap<>();
         params.put("page", page);
         //每页8条
         params.put("limit", 8);
