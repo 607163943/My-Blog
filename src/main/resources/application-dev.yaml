@@ -1,0 +1,7 @@
+# mysql
+mysql:
+  host: 192.168.150.101
+  port: 3306
+  username: root
+  password: 123456
+  database: my_blog_db
