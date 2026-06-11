@@ -13,12 +13,12 @@ public interface TagService extends IService<BlogTag> {
     /**
      * 查询标签的分页数据
      *
-     * @param pageUtil
-     * @return
+     * @param pageUtil 查询条件
+     * @return 分页数据
      */
     PageResult getBlogTagPage(PageQueryUtil pageUtil);
 
-    int getTotalTags();
+    Long getTotalTags();
 
     Boolean saveTag(String tagName);
 

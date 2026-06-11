@@ -24,33 +24,35 @@ public class LinkServiceImpl extends ServiceImpl<BlogLinkMapper, BlogLink> imple
     public PageResult getBlogLinkPage(PageQueryUtil pageUtil) {
         List<BlogLink> links = blogLinkMapper.findLinkList(pageUtil);
         int total = blogLinkMapper.getTotalLinks(pageUtil);
-        PageResult pageResult = new PageResult(links, total, pageUtil.getLimit(), pageUtil.getPage());
-        return pageResult;
+        return new PageResult(links, total, pageUtil.getLimit(), pageUtil.getPage());
     }
 
     @Override
-    public int getTotalLinks() {
-        return blogLinkMapper.getTotalLinks(null);
+    public Long getTotalLinks() {
+        return lambdaQuery().count();
     }
 
     @Override
     public Boolean saveLink(BlogLink link) {
-        return blogLinkMapper.insertSelective(link) > 0;
+        return save(link);
     }
 
     @Override
     public BlogLink selectById(Integer id) {
-        return blogLinkMapper.selectByPrimaryKey(id);
+        return getById(id);
     }
 
     @Override
     public Boolean updateLink(BlogLink tempLink) {
-        return blogLinkMapper.updateByPrimaryKeySelective(tempLink) > 0;
+        return updateById(tempLink);
     }
 
     @Override
     public Boolean deleteBatch(Integer[] ids) {
-        return blogLinkMapper.deleteBatch(ids) > 0;
+        return lambdaUpdate()
+                .set(BlogLink::getIsDeleted, 1)
+                .in(BlogLink::getLinkId, (Object) ids)
+                .update();
     }
 
     @Override
@@ -59,8 +61,7 @@ public class LinkServiceImpl extends ServiceImpl<BlogLinkMapper, BlogLink> imple
         List<BlogLink> links = blogLinkMapper.findLinkList(null);
         if (!CollectionUtils.isEmpty(links)) {
             //根据type进行分组
-            Map<Byte, List<BlogLink>> linksMap = links.stream().collect(Collectors.groupingBy(BlogLink::getLinkType));
-            return linksMap;
+            return links.stream().collect(Collectors.groupingBy(BlogLink::getLinkType));
         }
         return null;
     }

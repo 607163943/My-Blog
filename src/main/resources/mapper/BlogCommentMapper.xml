@@ -71,18 +71,6 @@
             #{id}
         </foreach>
     </update>
-    <insert id="insert" parameterType="com.site.blog.my.core.pojo.po.BlogComment">
-    insert into tb_blog_comment (comment_id, blog_id, commentator, 
-      email, website_url, comment_body, 
-      comment_create_time, commentator_ip, reply_body, 
-      reply_create_time, comment_status, is_deleted
-      )
-    values (#{commentId,jdbcType=BIGINT}, #{blogId,jdbcType=BIGINT}, #{commentator,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{websiteUrl,jdbcType=VARCHAR}, #{commentBody,jdbcType=VARCHAR}, 
-      #{commentCreateTime,jdbcType=TIMESTAMP}, #{commentatorIp,jdbcType=VARCHAR}, #{replyBody,jdbcType=VARCHAR}, 
-      #{replyCreateTime,jdbcType=TIMESTAMP}, #{commentStatus,jdbcType=TINYINT}, #{isDeleted,jdbcType=TINYINT}
-      )
-  </insert>
     <insert id="insertSelective" parameterType="com.site.blog.my.core.pojo.po.BlogComment">
         insert into tb_blog_comment
         <trim prefix="(" suffix=")" suffixOverrides=",">

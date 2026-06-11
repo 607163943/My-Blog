@@ -1,9 +1,9 @@
 package com.site.blog.my.core.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.site.blog.my.core.mapper.BlogCategoryMapper;
-import com.site.blog.my.core.mapper.BlogMapper;
+import com.site.blog.my.core.pojo.po.Blog;
 import com.site.blog.my.core.pojo.po.BlogCategory;
 import com.site.blog.my.core.service.CategoryService;
 import com.site.blog.my.core.util.PageQueryUtil;
@@ -19,30 +19,29 @@ public class CategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, BlogCat
 
     @Autowired
     private BlogCategoryMapper blogCategoryMapper;
-    @Autowired
-    private BlogMapper blogMapper;
 
     @Override
     public PageResult getBlogCategoryPage(PageQueryUtil pageUtil) {
         List<BlogCategory> categoryList = blogCategoryMapper.findCategoryList(pageUtil);
         int total = blogCategoryMapper.getTotalCategories(pageUtil);
-        PageResult pageResult = new PageResult(categoryList, total, pageUtil.getLimit(), pageUtil.getPage());
-        return pageResult;
+        return new PageResult(categoryList, total, pageUtil.getLimit(), pageUtil.getPage());
     }
 
     @Override
-    public int getTotalCategories() {
-        return blogCategoryMapper.getTotalCategories(null);
+    public Long getTotalCategories() {
+        return lambdaQuery().count();
     }
 
     @Override
     public Boolean saveCategory(String categoryName, String categoryIcon) {
-        BlogCategory temp = blogCategoryMapper.selectByCategoryName(categoryName);
-        if (temp == null) {
+        BlogCategory category = lambdaQuery()
+                .eq(BlogCategory::getCategoryName, categoryName)
+                .one();
+        if (category == null) {
             BlogCategory blogCategory = new BlogCategory();
             blogCategory.setCategoryName(categoryName);
             blogCategory.setCategoryIcon(categoryIcon);
-            return blogCategoryMapper.insertSelective(blogCategory) > 0;
+            return save(blogCategory);
         }
         return false;
     }
@@ -50,15 +49,19 @@ public class CategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, BlogCat
     @Override
     @Transactional
     public Boolean updateCategory(Integer categoryId, String categoryName, String categoryIcon) {
-        BlogCategory blogCategory = blogCategoryMapper.selectByPrimaryKey(categoryId);
-        if (blogCategory != null) {
-            blogCategory.setCategoryIcon(categoryIcon);
-            blogCategory.setCategoryName(categoryName);
-            //修改分类实体
-            blogMapper.updateBlogCategorys(categoryName, blogCategory.getCategoryId(), new Integer[]{categoryId});
-            return blogCategoryMapper.updateByPrimaryKeySelective(blogCategory) > 0;
+        BlogCategory blogCategory = getById(categoryId);
+        if (blogCategory == null) {
+            return false;
         }
-        return false;
+
+        blogCategory.setCategoryIcon(categoryIcon);
+        blogCategory.setCategoryName(categoryName);
+        //修改分类实体
+        Db.lambdaUpdate(Blog.class)
+                .set(Blog::getBlogCategoryName, categoryName)
+                .eq(Blog::getBlogCategoryId, categoryId)
+                .update();
+        return updateById(blogCategory);
     }
 
     @Override
@@ -68,14 +71,23 @@ public class CategoryServiceImpl extends ServiceImpl<BlogCategoryMapper, BlogCat
             return false;
         }
         //修改tb_blog表
-        blogMapper.updateBlogCategorys("默认分类", 0, ids);
+        Db.lambdaUpdate(Blog.class)
+                .set(Blog::getBlogCategoryName, "默认分类")
+                .set(Blog::getBlogCategoryId, 0)
+                .in(Blog::getBlogCategoryId, (Object[]) ids)
+                .update();
         //删除分类数据
-        return blogCategoryMapper.deleteBatch(ids) > 0;
+        return lambdaUpdate().set(BlogCategory::getIsDeleted, 1)
+                .in(BlogCategory::getCategoryId, (Object[]) ids)
+                .update();
     }
 
     @Override
     public List<BlogCategory> getAllCategories() {
-        return blogCategoryMapper.findCategoryList(null);
+        return lambdaQuery()
+                .orderByDesc(BlogCategory::getCategoryRank)
+                .orderByDesc(BlogCategory::getCreateTime)
+                .list();
     }
 
 }

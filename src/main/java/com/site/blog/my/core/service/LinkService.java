@@ -12,12 +12,12 @@ public interface LinkService extends IService<BlogLink> {
     /**
      * 查询友链的分页数据
      *
-     * @param pageUtil
-     * @return
+     * @param pageUtil 分页参数
+     * @return 分页数据
      */
     PageResult getBlogLinkPage(PageQueryUtil pageUtil);
 
-    int getTotalLinks();
+    Long getTotalLinks();
 
     Boolean saveLink(BlogLink link);
 
@@ -30,7 +30,7 @@ public interface LinkService extends IService<BlogLink> {
     /**
      * 返回友链页面所需的所有数据
      *
-     * @return
+     * @return 友链数据Map集合
      */
     Map<Byte, List<BlogLink>> getLinksForLinkPage();
 }

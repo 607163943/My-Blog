@@ -2,7 +2,7 @@ package com.site.blog.my.core.controller.admin;
 
 import com.site.blog.my.core.service.CategoryService;
 import com.site.blog.my.core.util.PageQueryUtil;
-import com.site.blog.my.core.util.Result;
+import com.site.blog.my.core.result.Result;
 import com.site.blog.my.core.util.ResultGenerator;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
@@ -13,12 +13,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-/**
- * @author 13
- * @qq交流群 796794009
- * @email 2449207463@qq.com
- * @link http://13blog.site
- */
 @Controller
 @RequestMapping("/admin")
 public class CategoryController {
@@ -37,7 +31,7 @@ public class CategoryController {
      */
     @RequestMapping(value = "/categories/list", method = RequestMethod.GET)
     @ResponseBody
-    public Result list(@RequestParam Map<String, Object> params) {
+    public Result<Object> list(@RequestParam Map<String, Object> params) {
         if (ObjectUtils.isEmpty(params.get("page")) || ObjectUtils.isEmpty(params.get("limit"))) {
             return ResultGenerator.genFailResult("参数异常！");
         }
@@ -50,7 +44,7 @@ public class CategoryController {
      */
     @RequestMapping(value = "/categories/save", method = RequestMethod.POST)
     @ResponseBody
-    public Result save(@RequestParam("categoryName") String categoryName,
+    public Result<Object> save(@RequestParam("categoryName") String categoryName,
                        @RequestParam("categoryIcon") String categoryIcon) {
         if (!StringUtils.hasText(categoryName)) {
             return ResultGenerator.genFailResult("请输入分类名称！");
@@ -71,7 +65,7 @@ public class CategoryController {
      */
     @RequestMapping(value = "/categories/update", method = RequestMethod.POST)
     @ResponseBody
-    public Result update(@RequestParam("categoryId") Integer categoryId,
+    public Result<Object> update(@RequestParam("categoryId") Integer categoryId,
                          @RequestParam("categoryName") String categoryName,
                          @RequestParam("categoryIcon") String categoryIcon) {
         if (!StringUtils.hasText(categoryName)) {
@@ -93,7 +87,7 @@ public class CategoryController {
      */
     @RequestMapping(value = "/categories/delete", method = RequestMethod.POST)
     @ResponseBody
-    public Result delete(@RequestBody Integer[] ids) {
+    public Result<Object> delete(@RequestBody Integer[] ids) {
         if (ids.length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
         }

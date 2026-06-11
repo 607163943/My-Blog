@@ -9,8 +9,6 @@ import java.util.List;
 public interface BlogLinkMapper extends BaseMapper<BlogLink> {
     int deleteByPrimaryKey(Integer linkId);
 
-    int insert(BlogLink record);
-
     int insertSelective(BlogLink record);
 
     BlogLink selectByPrimaryKey(Integer linkId);

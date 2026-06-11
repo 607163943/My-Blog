@@ -12,19 +12,19 @@ public interface CategoryService extends IService<BlogCategory> {
     /**
      * 查询分类的分页数据
      *
-     * @param pageUtil
-     * @return
+     * @param pageUtil 查询参数
+     * @return 分类列表
      */
     PageResult getBlogCategoryPage(PageQueryUtil pageUtil);
 
-    int getTotalCategories();
+    Long getTotalCategories();
 
     /**
      * 添加分类数据
      *
-     * @param categoryName
-     * @param categoryIcon
-     * @return
+     * @param categoryName 分类名
+     * @param categoryIcon 分类图标
+     * @return 添加结果
      */
     Boolean saveCategory(String categoryName,String categoryIcon);
 

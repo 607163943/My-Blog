@@ -8,8 +8,6 @@ import java.util.Map;
 public interface BlogCommentMapper extends BaseMapper<BlogComment> {
     int deleteByPrimaryKey(Long commentId);
 
-    int insert(BlogComment record);
-
     int insertSelective(BlogComment record);
 
     BlogComment selectByPrimaryKey(Long commentId);

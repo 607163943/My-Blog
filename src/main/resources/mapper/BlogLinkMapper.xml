@@ -50,15 +50,6 @@
         select count(*)  from tb_link
         where is_deleted=0
     </select>
-
-    <insert id="insert" parameterType="com.site.blog.my.core.pojo.po.BlogLink">
-    insert into tb_link (link_id, link_type, link_name, 
-      link_url, link_description, link_rank, 
-      is_deleted, create_time)
-    values (#{linkId,jdbcType=INTEGER}, #{linkType,jdbcType=TINYINT}, #{linkName,jdbcType=VARCHAR}, 
-      #{linkUrl,jdbcType=VARCHAR}, #{linkDescription,jdbcType=VARCHAR}, #{linkRank,jdbcType=INTEGER}, 
-      #{isDeleted,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
-    </insert>
     <insert id="insertSelective" parameterType="com.site.blog.my.core.pojo.po.BlogLink">
         insert into tb_link
         <trim prefix="(" suffix=")" suffixOverrides=",">

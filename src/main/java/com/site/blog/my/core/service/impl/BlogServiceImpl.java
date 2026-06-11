@@ -2,6 +2,7 @@ package com.site.blog.my.core.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.site.blog.my.core.pojo.vo.BlogDetailVO;
 import com.site.blog.my.core.pojo.vo.BlogListVO;
 import com.site.blog.my.core.pojo.vo.SimpleBlogListVO;
@@ -42,7 +43,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     @Override
     @Transactional
     public String saveBlog(Blog blog) {
-        BlogCategory blogCategory = categoryMapper.selectByPrimaryKey(blog.getBlogCategoryId());
+        BlogCategory blogCategory = categoryMapper.selectById(blog.getBlogCategoryId());
         if (blogCategory == null) {
             blog.setBlogCategoryId(0);
             blog.setBlogCategoryName("默认分类");
@@ -52,48 +53,53 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
             //分类的排序值加1
             blogCategory.setCategoryRank(blogCategory.getCategoryRank() + 1);
         }
+
+        //保存文章
+        if (!save(blog)) {
+            return "保存失败";
+        }
+
+        //新增的tag对象
         //处理标签数据
         String[] tags = blog.getBlogTags().split(",");
         if (tags.length > 6) {
             return "标签数量限制为6";
         }
-        //保存文章
-        if (blogMapper.insertSelective(blog) > 0) {
-            //新增的tag对象
-            List<BlogTag> tagListForInsert = new ArrayList<>();
-            //所有的tag对象，用于建立关系数据
-            List<BlogTag> allTagsList = new ArrayList<>();
-            for (int i = 0; i < tags.length; i++) {
-                BlogTag tag = tagMapper.selectByTagName(tags[i]);
-                if (tag == null) {
-                    //不存在就新增
-                    BlogTag tempTag = new BlogTag();
-                    tempTag.setTagName(tags[i]);
-                    tagListForInsert.add(tempTag);
-                } else {
-                    allTagsList.add(tag);
-                }
-            }
-            //新增标签数据并修改分类排序值
-            if (!CollectionUtils.isEmpty(tagListForInsert)) {
-                tagMapper.batchInsertBlogTag(tagListForInsert);
-            }
-            if (blogCategory != null) {
-                categoryMapper.updateByPrimaryKeySelective(blogCategory);
-            }
-            List<BlogTagRelation> blogTagRelations = new ArrayList<>();
-            //新增关系数据
-            allTagsList.addAll(tagListForInsert);
-            for (BlogTag tag : allTagsList) {
-                BlogTagRelation blogTagRelation = new BlogTagRelation();
-                blogTagRelation.setBlogId(blog.getBlogId());
-                blogTagRelation.setTagId(tag.getTagId());
-                blogTagRelations.add(blogTagRelation);
-            }
-            if (blogTagRelationMapper.batchInsert(blogTagRelations) > 0) {
-                return "success";
+        List<BlogTag> tagListForInsert = new ArrayList<>();
+        //所有的tag对象，用于建立关系数据
+        List<BlogTag> allTagsList = new ArrayList<>();
+        for (int i = 0; i < tags.length; i++) {
+            BlogTag tag = tagMapper.selectByTagName(tags[i]);
+            if (tag == null) {
+                //不存在就新增
+                BlogTag tempTag = new BlogTag();
+                tempTag.setTagName(tags[i]);
+                tagListForInsert.add(tempTag);
+            } else {
+                allTagsList.add(tag);
             }
         }
+        //新增标签数据并修改分类排序值
+        if (!CollectionUtils.isEmpty(tagListForInsert)) {
+            Db.saveBatch(tagListForInsert);
+            allTagsList.addAll(tagListForInsert);
+        }
+        if (blogCategory != null) {
+            categoryMapper.updateById(blogCategory);
+        }
+        List<BlogTagRelation> blogTagRelations = new ArrayList<>();
+        //新增关系数据
+        allTagsList.addAll(tagListForInsert);
+        for (BlogTag tag : allTagsList) {
+            BlogTagRelation blogTagRelation = new BlogTagRelation();
+            blogTagRelation.setBlogId(blog.getBlogId());
+            blogTagRelation.setTagId(tag.getTagId());
+            blogTagRelations.add(blogTagRelation);
+        }
+        if (blogTagRelationMapper.batchInsert(blogTagRelations) > 0) {
+            return "success";
+        }
+
         return "保存失败";
     }
 
@@ -101,13 +107,15 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     public PageResult getBlogsPage(PageQueryUtil pageUtil) {
         List<Blog> blogList = blogMapper.findBlogList(pageUtil);
         int total = blogMapper.getTotalBlogs(pageUtil);
-        PageResult pageResult = new PageResult(blogList, total, pageUtil.getLimit(), pageUtil.getPage());
-        return pageResult;
+        return new PageResult(blogList, total, pageUtil.getLimit(), pageUtil.getPage());
     }
 
     @Override
     public Boolean deleteBatch(Integer[] ids) {
-        return blogMapper.deleteBatch(ids) > 0;
+        return lambdaUpdate()
+                .set(Blog::getIsDeleted, 1)
+                .in(Blog::getBlogId, (Object) ids)
+                .update();
     }
 
     @Override
@@ -117,18 +125,18 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     @Override
     public Blog getBlogById(Long blogId) {
-        return blogMapper.selectByPrimaryKey(blogId);
+        return getById(blogId);
     }
 
     @Override
     @Transactional
     public String updateBlog(Blog blog) {
-        Blog blogForUpdate = blogMapper.selectByPrimaryKey(blog.getBlogId());
+        Blog blogForUpdate = getById(blog.getBlogId());
         if (blogForUpdate == null) {
             return "数据不存在";
         }
         BeanUtil.copyProperties(blog, blogForUpdate);
-        BlogCategory blogCategory = categoryMapper.selectByPrimaryKey(blog.getBlogCategoryId());
+        BlogCategory blogCategory = categoryMapper.selectById(blog.getBlogCategoryId());
         if (blogCategory == null) {
             blogForUpdate.setBlogCategoryId(0);
             blogForUpdate.setBlogCategoryName("默认分类");
@@ -162,7 +170,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         }
         //新增标签数据不为空->新增标签数据
         if (!CollectionUtils.isEmpty(tagListForInsert)) {
-            tagMapper.batchInsertBlogTag(tagListForInsert);
+            Db.saveBatch(tagListForInsert);
+            allTagsList.addAll(tagListForInsert);
         }
         List<BlogTagRelation> blogTagRelations = new ArrayList<>();
         //新增关系数据
@@ -175,11 +184,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         }
         //修改blog信息->修改分类排序值->删除原关系数据->保存新的关系数据
         if (blogCategory != null) {
-            categoryMapper.updateByPrimaryKeySelective(blogCategory);
+            categoryMapper.updateById(blogCategory);
         }
         blogTagRelationMapper.deleteByBlogId(blog.getBlogId());
         blogTagRelationMapper.batchInsert(blogTagRelations);
-        if (blogMapper.updateByPrimaryKeySelective(blogForUpdate) > 0) {
+        if (blogMapper.updateById(blogForUpdate) > 0) {
             return "success";
         }
         return "修改失败";
@@ -187,7 +196,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     @Override
     public PageResult getBlogsForIndexPage(int page) {
-        Map<String,Object> params = new HashMap();
+        Map<String, Object> params = new HashMap();
         params.put("page", page);
         //每页8条
         params.put("limit", 8);
@@ -216,13 +225,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     @Override
     public BlogDetailVO getBlogDetail(Long id) {
-        Blog blog = blogMapper.selectByPrimaryKey(id);
+        Blog blog = getById(id);
         //不为空且状态为已发布
-        BlogDetailVO blogDetailVO = getBlogDetailVO(blog);
-        if (blogDetailVO != null) {
-            return blogDetailVO;
-        }
-        return null;
+        return getBlogDetailVO(blog);
     }
 
     @Override
@@ -230,7 +235,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         if (PatternUtil.validKeyword(tagName)) {
             BlogTag tag = tagMapper.selectByTagName(tagName);
             if (tag != null && page > 0) {
-                Map<String,Object> param = new HashMap<>();
+                Map<String, Object> param = new HashMap<>();
                 param.put("page", page);
                 param.put("limit", 9);
                 param.put("tagId", tag.getTagId());
@@ -254,7 +259,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
                 blogCategory.setCategoryId(0);
             }
             if (blogCategory != null && page > 0) {
-                Map<String,Object> param = new HashMap<>();
+                Map<String, Object> param = new HashMap<>();
                 param.put("page", page);
                 param.put("limit", 9);
                 param.put("blogCategoryId", blogCategory.getCategoryId());
@@ -273,7 +278,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     @Override
     public PageResult getBlogsPageBySearch(String keyword, int page) {
         if (page > 0 && PatternUtil.validKeyword(keyword)) {
-            Map<String,Object> param = new HashMap<>();
+            Map<String, Object> param = new HashMap<>();
             param.put("page", page);
             param.put("limit", 9);
             param.put("keyword", keyword);
@@ -309,11 +314,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         if (blog != null && blog.getBlogStatus() == 1) {
             //增加浏览量
             blog.setBlogViews(blog.getBlogViews() + 1);
-            blogMapper.updateByPrimaryKey(blog);
+            updateById(blog);
             BlogDetailVO blogDetailVO = new BlogDetailVO();
             BeanUtils.copyProperties(blog, blogDetailVO);
             blogDetailVO.setBlogContent(MarkDownUtil.mdToHtml(blogDetailVO.getBlogContent()));
-            BlogCategory blogCategory = categoryMapper.selectByPrimaryKey(blog.getBlogCategoryId());
+            BlogCategory blogCategory = categoryMapper.selectById(blog.getBlogCategoryId());
             if (blogCategory == null) {
                 blogCategory = new BlogCategory();
                 blogCategory.setCategoryId(0);
@@ -328,7 +333,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
                 blogDetailVO.setBlogTags(tags);
             }
             //设置评论数
-            Map<String,Object> params = new HashMap<>();
+            Map<String, Object> params = new HashMap<>();
             params.put("blogId", blog.getBlogId());
             params.put("commentStatus", 1);//过滤审核通过的数据
             blogDetailVO.setCommentCount(blogCommentMapper.getTotalBlogComments(params));

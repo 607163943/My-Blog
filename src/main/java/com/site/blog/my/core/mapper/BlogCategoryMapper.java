@@ -10,11 +10,7 @@ import java.util.List;
 public interface BlogCategoryMapper extends BaseMapper<BlogCategory> {
     int deleteByPrimaryKey(Integer categoryId);
 
-    int insert(BlogCategory record);
-
     int insertSelective(BlogCategory record);
-
-    BlogCategory selectByPrimaryKey(Integer categoryId);
 
     BlogCategory selectByCategoryName(String categoryName);
 

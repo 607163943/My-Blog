@@ -9,8 +9,6 @@ import java.util.List;
 public interface BlogTagMapper extends BaseMapper<BlogTag> {
     int deleteByPrimaryKey(Integer tagId);
 
-    int insert(BlogTag record);
-
     int insertSelective(BlogTag record);
 
     BlogTag selectByPrimaryKey(Integer tagId);

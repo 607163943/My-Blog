@@ -75,13 +75,6 @@
             (#{item.tagName,jdbcType=VARCHAR})
         </foreach>
     </insert>
-
-    <insert id="insert" parameterType="com.site.blog.my.core.pojo.po.BlogTag">
-    insert into tb_blog_tag (tag_id, tag_name, is_deleted, 
-      create_time)
-    values (#{tagId,jdbcType=INTEGER}, #{tagName,jdbcType=VARCHAR}, #{isDeleted,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP})
-  </insert>
     <insert id="insertSelective" parameterType="com.site.blog.my.core.pojo.po.BlogTag">
         insert into tb_blog_tag
         <trim prefix="(" suffix=")" suffixOverrides=",">

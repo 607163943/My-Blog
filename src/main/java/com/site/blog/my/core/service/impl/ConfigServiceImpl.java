@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.site.blog.my.core.mapper.BlogConfigMapper;
 import com.site.blog.my.core.pojo.po.BlogConfig;
 import com.site.blog.my.core.service.ConfigService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -15,9 +14,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogConfig> implements ConfigService {
-    @Autowired
-    private BlogConfigMapper configMapper;
-
     public static final String websiteName = "personal blog";
     public static final String websiteDescription = "personal blog是SpringBoot2+Thymeleaf+Mybatis建造的个人博客网站.SpringBoot实战博客源码.个人博客搭建";
     public static final String websiteLogo = "/admin/dist/img/logo2.png";
@@ -35,11 +31,11 @@ public class ConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogConfig>
 
     @Override
     public int updateConfig(String configName, String configValue) {
-        BlogConfig blogConfig = configMapper.selectByPrimaryKey(configName);
+        BlogConfig blogConfig = getById(configName);
         if (blogConfig != null) {
             blogConfig.setConfigValue(configValue);
             blogConfig.setUpdateTime(new Date());
-            return configMapper.updateByPrimaryKeySelective(blogConfig);
+            return updateById(blogConfig) ? 1 : 0;
         }
         return 0;
     }
@@ -47,7 +43,7 @@ public class ConfigServiceImpl extends ServiceImpl<BlogConfigMapper, BlogConfig>
     @Override
     public Map<String, String> getAllConfigs() {
         //获取所有的map并封装为map
-        List<BlogConfig> blogConfigs = configMapper.selectAll();
+        List<BlogConfig> blogConfigs = list();
         Map<String, String> configMap = blogConfigs.stream().collect(Collectors.toMap(BlogConfig::getConfigName, BlogConfig::getConfigValue));
         for (Map.Entry<String, String> config : configMap.entrySet()) {
             if ("websiteName".equals(config.getKey()) && !StringUtils.hasText(config.getValue())) {
