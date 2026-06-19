@@ -5,11 +5,6 @@ import java.util.regex.Pattern;
 
 /**
  * 正则工具类
- *
- * @author 13
- * @qq交流群 796794009
- * @email 2449207463@qq.com
- * @link http://13blog.site
  */
 public class PatternUtil {
 
@@ -22,10 +17,11 @@ public class PatternUtil {
     /**
      * 验证只包含中英文和数字的字符串
      *
-     * @param keyword
-     * @return
+     * @param keyword 关键字
+     * @return 验证结果
      */
     public static Boolean validKeyword(String keyword) {
+        // 匹配中英文和数字
         String regex = "^[a-zA-Z0-9\u4E00-\u9FA5]+$";
         Pattern pattern = Pattern.compile(regex);
         Matcher match = pattern.matcher(keyword);
@@ -36,8 +32,8 @@ public class PatternUtil {
     /**
      * 判断是否是邮箱
      *
-     * @param emailStr
-     * @return
+     * @param emailStr 邮箱字符串
+     * @return 验证结果
      */
     public static boolean isEmail(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX.matcher(emailStr);
@@ -47,17 +43,14 @@ public class PatternUtil {
     /**
      * 判断是否是网址
      *
-     * @param urlString
-     * @return
+     * @param urlString 网址字符串
+     * @return 验证结果
      */
     public static boolean isURL(String urlString) {
-        String regex = "^([hH][tT]{2}[pP]:/*|[hH][tT]{2}[pP][sS]:/*|[fF][tT][pP]:/*)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~\\/])+(\\?{0,1}(([A-Za-z0-9-~]+\\={0,1})([A-Za-z0-9-~]*)\\&{0,1})*)$";
+        String regex = "^([hH][tT]{2}[pP]:/*|[hH][tT]{2}[pP][sS]:/*|[fF][tT][pP]:/*)(([A-Za-z0-9-~]+).)+([A-Za-z0-9-~/])+(\\??(([A-Za-z0-9-~]+=?)([A-Za-z0-9-~]*)&?)*)$";
         Pattern pattern = Pattern.compile(regex);
-        if (pattern.matcher(urlString).matches()) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return pattern.matcher(urlString).matches();
     }
 
 }

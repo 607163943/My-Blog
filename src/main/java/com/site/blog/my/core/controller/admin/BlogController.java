@@ -1,6 +1,6 @@
 package com.site.blog.my.core.controller.admin;
 
-import com.site.blog.my.core.config.Constants;
+import com.site.blog.my.core.constant.Constants;
 import com.site.blog.my.core.pojo.po.Blog;
 import com.site.blog.my.core.result.Result;
 import com.site.blog.my.core.service.BlogService;
