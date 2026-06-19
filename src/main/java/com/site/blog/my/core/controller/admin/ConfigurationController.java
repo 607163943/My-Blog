@@ -1,21 +1,20 @@
 package com.site.blog.my.core.controller.admin;
 
-import com.site.blog.my.core.service.ConfigService;
 import com.site.blog.my.core.result.Result;
+import com.site.blog.my.core.service.ConfigService;
 import com.site.blog.my.core.util.ResultGenerator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/admin")
 public class ConfigurationController {
-
-    @Resource
-    private ConfigService configService;
+    private final ConfigService configService;
 
     @GetMapping("/configurations")
     public String list(HttpServletRequest request) {

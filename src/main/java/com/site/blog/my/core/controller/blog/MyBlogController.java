@@ -1,40 +1,44 @@
 package com.site.blog.my.core.controller.blog;
 
 import cn.hutool.captcha.ShearCaptcha;
-import com.site.blog.my.core.pojo.vo.BlogDetailVO;
 import com.site.blog.my.core.pojo.po.BlogComment;
 import com.site.blog.my.core.pojo.po.BlogLink;
+import com.site.blog.my.core.pojo.vo.BlogDetailVO;
 import com.site.blog.my.core.result.Result;
 import com.site.blog.my.core.service.*;
-import com.site.blog.my.core.util.*;
+import com.site.blog.my.core.util.MyBlogUtils;
+import com.site.blog.my.core.util.PageResult;
+import com.site.blog.my.core.util.PatternUtil;
+import com.site.blog.my.core.util.ResultGenerator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Controller
 public class MyBlogController {
 
     //public static String theme = "default";
     //public static String theme = "yummy-jekyll";
     public static String theme = "amaze";
-    @Resource
-    private BlogService blogService;
-    @Resource
-    private TagService tagService;
-    @Resource
-    private LinkService linkService;
-    @Resource
-    private CommentService commentService;
-    @Resource
-    private ConfigService configService;
-    @Resource
-    private CategoryService categoryService;
+
+    private final BlogService blogService;
+
+    private final TagService tagService;
+
+    private final LinkService linkService;
+
+    private final CommentService commentService;
+
+    private final ConfigService configService;
+
+    private final CategoryService categoryService;
 
     /**
      * 首页
@@ -193,7 +197,7 @@ public class MyBlogController {
      */
     @PostMapping(value = "/blog/comment")
     @ResponseBody
-    public Result comment(HttpServletRequest request, HttpSession session,
+    public Result<Object> comment(HttpServletRequest request, HttpSession session,
                           @RequestParam Long blogId, @RequestParam String verifyCode,
                           @RequestParam String commentator, @RequestParam String email,
                           @RequestParam String websiteUrl, @RequestParam String commentBody) {

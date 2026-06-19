@@ -3,30 +3,29 @@ package com.site.blog.my.core.controller.admin;
 import cn.hutool.captcha.ShearCaptcha;
 import com.site.blog.my.core.pojo.po.AdminUser;
 import com.site.blog.my.core.service.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+    private final AdminUserService adminUserService;
 
-    @Resource
-    private AdminUserService adminUserService;
-    @Resource
-    private BlogService blogService;
-    @Resource
-    private CategoryService categoryService;
-    @Resource
-    private LinkService linkService;
-    @Resource
-    private TagService tagService;
-    @Resource
-    private CommentService commentService;
+    private final BlogService blogService;
+
+    private final CategoryService categoryService;
+
+    private final LinkService linkService;
+
+    private final TagService tagService;
+
+    private final CommentService commentService;
 
 
     @GetMapping({"/login"})

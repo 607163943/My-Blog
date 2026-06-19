@@ -1,24 +1,23 @@
 package com.site.blog.my.core.controller.admin;
 
+import com.site.blog.my.core.result.Result;
 import com.site.blog.my.core.service.CategoryService;
 import com.site.blog.my.core.util.PageQueryUtil;
-import com.site.blog.my.core.result.Result;
 import com.site.blog.my.core.util.ResultGenerator;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/admin")
 public class CategoryController {
-
-    @Resource
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping("/categories")
     public String categoryPage(HttpServletRequest request) {
