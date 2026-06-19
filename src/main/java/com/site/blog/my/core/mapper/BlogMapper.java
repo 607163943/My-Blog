@@ -8,8 +8,6 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface BlogMapper extends BaseMapper<Blog> {
-    int updateByPrimaryKeyWithBLOBs(Blog record);
-
     List<Blog> findBlogList(PageQueryUtil pageUtil);
 
     List<Blog> findBlogListByType(@Param("type") int type, @Param("limit") int limit);
@@ -21,7 +19,4 @@ public interface BlogMapper extends BaseMapper<Blog> {
     int getTotalBlogsByTagId(PageQueryUtil pageUtil);
 
     Blog selectBySubUrl(String subUrl);
-
-    int updateBlogCategorys(@Param("categoryName") String categoryName, @Param("categoryId") Integer categoryId, @Param("ids")Integer[] ids);
-
 }

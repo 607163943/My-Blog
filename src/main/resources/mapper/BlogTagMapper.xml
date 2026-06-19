@@ -39,42 +39,12 @@
     select count(*)  from tb_blog_tag
     where is_deleted=0
   </select>
-
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from tb_blog_tag
-        where tag_id = #{tagId,jdbcType=INTEGER} AND is_deleted = 0
-    </select>
-
     <select id="selectByTagName" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from tb_blog_tag
         where tag_name = #{tagName,jdbcType=VARCHAR} AND is_deleted = 0
     </select>
-
-    <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    update tb_blog_tag set is_deleted = 1
-    where tag_id = #{tagId,jdbcType=INTEGER}
-  </update>
-
-    <update id="deleteBatch">
-        update tb_blog_tag
-        set is_deleted=1 where tag_id in
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </update>
-
-    <insert id="batchInsertBlogTag" parameterType="java.util.List" useGeneratedKeys="true"
-            keyProperty="tagId">
-        INSERT into tb_blog_tag(tag_name)
-        VALUES
-        <foreach collection="list" item="item" separator=",">
-            (#{item.tagName,jdbcType=VARCHAR})
-        </foreach>
-    </insert>
     <insert id="insertSelective" parameterType="com.site.blog.my.core.pojo.po.BlogTag">
         insert into tb_blog_tag
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -106,26 +76,4 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.site.blog.my.core.pojo.po.BlogTag">
-        update tb_blog_tag
-        <set>
-            <if test="tagName != null">
-                tag_name = #{tagName,jdbcType=VARCHAR},
-            </if>
-            <if test="isDeleted != null">
-                is_deleted = #{isDeleted,jdbcType=TINYINT},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where tag_id = #{tagId,jdbcType=INTEGER}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="com.site.blog.my.core.pojo.po.BlogTag">
-    update tb_blog_tag
-    set tag_name = #{tagName,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=TINYINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
-    where tag_id = #{tagId,jdbcType=INTEGER}
-  </update>
 </mapper>

@@ -1,5 +1,6 @@
 package com.site.blog.my.core.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.site.blog.my.core.mapper.AdminUserMapper;
 import com.site.blog.my.core.pojo.po.AdminUser;
@@ -21,6 +22,8 @@ public class AdminUserServiceImpl extends ServiceImpl<AdminUserMapper, AdminUser
         if(!adminUser.getLoginPassword().equals(passwordMd5)) {
             return null;
         }
+
+        StpUtil.login(adminUser.getAdminUserId());
         return adminUser;
     }
 

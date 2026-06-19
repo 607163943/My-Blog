@@ -4,5 +4,4 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.site.blog.my.core.pojo.po.BlogConfig;
 
 public interface BlogConfigMapper extends BaseMapper<BlogConfig> {
-    BlogConfig selectByPrimaryKey(String configName);
 }

@@ -22,7 +22,7 @@ public class CommentServiceImpl extends ServiceImpl<BlogCommentMapper, BlogComme
 
     @Override
     public Boolean addComment(BlogComment blogComment) {
-        return blogCommentMapper.insertSelective(blogComment) > 0;
+        return save(blogComment);
     }
 
     @Override
